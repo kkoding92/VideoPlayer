@@ -6,10 +6,6 @@ using UnityEngine.Networking;
 public abstract class CircleVRProtocolBase
 {
     public static CircleVREventHandler Delegate;
-
-    protected readonly Vector3 CENTER_ANCHOR_POSITION = new Vector3(0.0f, 0.0f, 0.1f);
-    protected readonly Vector3 CENTER_ANCHOR_EULER = new Vector3(90.0f, 0.0f, 0.0f);
-
     private const int REC_BUFFER_SIZE = 1024;
 
     protected int hostID;

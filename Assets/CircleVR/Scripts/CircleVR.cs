@@ -52,7 +52,8 @@ public class CircleVR : MonoBehaviour
     public const int MAX_CLIENT_COUNT = 4;
 
     [SerializeField] private string contentName;
-
+    [SerializeField] private GameObject came;
+    [SerializeField] private GameObject display;
     [SerializeField] private GameObject canvas;
     [SerializeField] private GameObject hostUI;
   
@@ -84,26 +85,12 @@ public class CircleVR : MonoBehaviour
             protocol = value;
         }
     }
-
-    private void SetSlotColor(Image slot , ClientState state)
-    {
-        if(state == ClientState.Connected)
-        {
-            slot.color = Color.green;
-            return;
-        }
-
-        slot.color = Color.red;
-    }
-
     private void Start()
     {
         canvas.SetActive(false);
 
         LoadConfigure();
-
-        //Debug.Log(System.Runtime.InteropServices.Marshal.SizeOf(new ClientData(0, "")));
-
+        
         if (config.network == "Host")
         {
 
@@ -117,19 +104,10 @@ public class CircleVR : MonoBehaviour
 
         Protocol.Init(config);
     }
-
-    private void FrameRateUpdate()
-    {
-        //TODO : FrameRate update
-    }
-
     private void Update()
     {
         if(Input.GetKeyDown("`"))
             canvas.SetActive(!canvas.activeSelf);
-
-        if(canvas.activeSelf)
-            FrameRateUpdate();
 
         if (Protocol == null)
             return;
