@@ -5,6 +5,15 @@ using UnityEngine;
 using System.Text;
 
 [Serializable]
+public struct HostData
+{
+    public string buttonSate;
+    public HostData(string buttonSate){
+        this.buttonSate = buttonSate;
+    }
+}
+
+[Serializable]
 public struct ClientData
 {
     public int userId;
@@ -26,12 +35,6 @@ public struct Configuration
     public string network;
 }
 
-public enum ClientState
-{
-    Connected,
-    NotConnected
-}
-
 public class CircleVR : MonoBehaviour
 {
     private static CircleVR instance = null;
@@ -49,10 +52,10 @@ public class CircleVR : MonoBehaviour
         }
     }
 
-    public const int MAX_CLIENT_COUNT = 4;
+    public const int MAX_CLIENT_COUNT = 2;
 
     [SerializeField] private string contentName;
-    [SerializeField] private GameObject came;
+    [SerializeField] private GameObject cam;
     [SerializeField] private GameObject display;
     [SerializeField] private GameObject canvas;
     [SerializeField] private GameObject hostUI;
@@ -72,7 +75,7 @@ public class CircleVR : MonoBehaviour
             contentName = value;
         }
     }
-
+    
     public CircleVRProtocolBase Protocol
     {
         get
@@ -85,21 +88,47 @@ public class CircleVR : MonoBehaviour
             protocol = value;
         }
     }
+
+    public GameObject Cam
+    {
+        get
+        {
+            return cam;
+        }
+
+        set
+        {
+            cam = value;
+        }
+    }
+
+    public GameObject Display
+    {
+        get
+        {
+            return display;
+        }
+
+        set
+        {
+            display = value;
+        }
+    }
+
     private void Start()
     {
         canvas.SetActive(false);
 
         LoadConfigure();
-        
+
         if (config.network == "Host")
         {
-
-            Protocol = new CircleVRClient();
-            hostUI.SetActive(false);
+            Protocol = new CircleVRHost();
         }
         else if(config.network == "client")
         {
-            Protocol = new CircleVRHost();
+            Protocol = new CircleVRClient();
+            hostUI.SetActive(false);
         }
 
         Protocol.Init(config);

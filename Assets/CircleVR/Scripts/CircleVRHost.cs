@@ -12,25 +12,45 @@ public class CircleVRHost : CircleVRProtocolBase
         public int userId;
         public string trackerId;
     }
-    
-    private HostData datas = new HostData();
-
     private List<Connection> connections = new List<Connection>();
-
-    private Camera[] clientCams;
-
+    private List<GameObject> camList = new List<GameObject>();
     private bool initFinished;
 
     public override void Init(Configuration config)
     {
         CreateHost(out hostID, out unreliableChannel, out reliableChannel, config.serverPort, CircleVR.MAX_CLIENT_COUNT);
         
+        CreateCameras();
+        CreateVideoPanel();
+
         if (Delegate != null)
             Delegate.OnHostInit();
         
         initFinished = true;
     }
     
+    private void CreateCameras(){
+        for(int i=0; i< 4; i++){
+            GameObject camObj = GameObject.Instantiate(CircleVR.Instance.Cam);
+            camList.Add(camObj);
+        }
+        SetCamera();
+    }
+    private void SetCamera(){
+        float frustumHeight = 2.0f * 2.0f* Mathf.Tan(camList[0].GetComponent<Camera>().fieldOfView * 0.5f * Mathf.Deg2Rad);
+        float frustumWidth = frustumHeight * camList[0].GetComponent<Camera>().aspect;
+        frustumHeight = frustumWidth / camList[0].GetComponent<Camera>().aspect;
+        
+        camList[0].transform.position = new Vector3(-frustumWidth * 0.5f, frustumHeight * 0.5f, 0);
+        camList[1].transform.position = new Vector3(frustumWidth * 0.5f, frustumHeight * 0.5f, 0);
+        camList[2].transform.position = new Vector3(frustumWidth * 0.5f, -frustumHeight * 0.5f, 0);
+        camList[3].transform.position = new Vector3(-frustumWidth * 0.5f, -frustumHeight * 0.5f, 0);
+    }
+
+    private void CreateVideoPanel(){
+        GameObject panelObj = GameObject.Instantiate(CircleVR.Instance.Display);
+    }
+
     private Connection GetConnectionByConnectionID(int connectionId)
     {
         foreach (Connection connection in connections)
@@ -99,16 +119,13 @@ public class CircleVRHost : CircleVRProtocolBase
     {
         foreach (Connection connection in connections)
         {
-            SendData(hostID, JsonUtility.ToJson(datas), connection.id, unreliableChannel);
+            //SendData(hostID, JsonUtility.ToJson(datas), connection.id, unreliableChannel);
         }
     }
 
     public override void ManualUpdate()
     {
         base.ManualUpdate();
-
-        if (initFinished && connections.Count > 0)
-            SendPosition();
     }
 
     protected override void OnDisconnect(int hostId, int connectionId, byte error)
