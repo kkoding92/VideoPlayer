@@ -3,26 +3,16 @@ using System.IO;
 using UnityEngine.UI;
 using UnityEngine;
 using System.Text;
-
-[Serializable]
-public struct HostData
-{
-    public string buttonSate;
-    public HostData(string buttonSate){
-        this.buttonSate = buttonSate;
-    }
-}
+using UnityEngine.Video;
 
 [Serializable]
 public struct ClientData
 {
-    public int userId;
-    public string trackerId;
+    public string ContentName;
 
-    public ClientData(int userId , string trackerId)
+    public  ClientData(string ContentName)
     {
-        this.userId = userId;
-        this.trackerId = trackerId;
+        this.ContentName = ContentName;
     }
 }
 
@@ -59,6 +49,7 @@ public class CircleVR : MonoBehaviour
     [SerializeField] private GameObject display;
     [SerializeField] private GameObject canvas;
     [SerializeField] private GameObject hostUI;
+    [SerializeField] private VideoClip[] clip;
   
     private Configuration config;
     private CircleVRProtocolBase protocol;
@@ -115,20 +106,46 @@ public class CircleVR : MonoBehaviour
         }
     }
 
+    public VideoClip[] Clip
+    {
+        get
+        {
+            return clip;
+        }
+
+        set
+        {
+            clip = value;
+        }
+    }
+
+    public GameObject HostUI
+    {
+        get
+        {
+            return hostUI;
+        }
+
+        set
+        {
+            hostUI = value;
+        }
+    }
+
     private void Start()
     {
         canvas.SetActive(false);
 
         LoadConfigure();
-
-        if (config.network == "Host")
-        {
-            Protocol = new CircleVRHost();
-        }
-        else if(config.network == "client")
+        
+        if(config.network == "client")
         {
             Protocol = new CircleVRClient();
-            hostUI.SetActive(false);
+        }
+        else if(config.network =="")
+        {
+            Protocol = new CircleVRHost();
+            HostUI.SetActive(false);
         }
 
         Protocol.Init(config);

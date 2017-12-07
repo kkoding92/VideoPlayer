@@ -3,18 +3,19 @@ using UnityEngine.Networking;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using UnityEngine.Video;
 
 public class CircleVRHost : CircleVRProtocolBase
 {
     public class Connection
     {
         public int id;
-        public int userId;
-        public string trackerId;
     }
+
     private List<Connection> connections = new List<Connection>();
     private List<GameObject> camList = new List<GameObject>();
     private bool initFinished;
+    private VideoPlayer vp;
 
     public override void Init(Configuration config)
     {
@@ -48,7 +49,18 @@ public class CircleVRHost : CircleVRProtocolBase
     }
 
     private void CreateVideoPanel(){
-        GameObject panelObj = GameObject.Instantiate(CircleVR.Instance.Display);
+        GameObject panel = GameObject.Instantiate(CircleVR.Instance.Display);
+        vp = panel.GetComponent<VideoPlayer>();
+
+        SetVideoPanel();
+    }
+
+    private void SetVideoPanel()
+    {
+        vp.clip = CircleVR.Instance.Clip[0];
+
+        vp.playOnAwake = true;
+        vp.isLooping = true;
     }
 
     private Connection GetConnectionByConnectionID(int connectionId)
@@ -61,24 +73,8 @@ public class CircleVRHost : CircleVRProtocolBase
         return null;
     }
 
-    private bool HasTrackerID(string trackerId)
-    {
-        foreach(Connection connection in connections)
-        {
-            if (connection.trackerId == trackerId)
-                return true;
-        }
-
-        return false;
-    }
-
     private bool TryCreateConnection(int connectionId, ClientData data)
     {
-        //if (HasUserID(data.userId, connections))
-        //{
-        //    return false;
-        //}
-
         Connection connection = GetConnectionByConnectionID(connectionId);
 
         if (connection != null)
@@ -88,8 +84,6 @@ public class CircleVRHost : CircleVRProtocolBase
 
         connection = new Connection();
         connection.id = connectionId;
-        connection.userId = data.userId;
-        connection.trackerId = data.trackerId;
 
         connections.Add(connection);
         
@@ -114,15 +108,7 @@ public class CircleVRHost : CircleVRProtocolBase
         Connection connection = GetConnectionByConnectionID(connectionId);
         connections.Remove(connection);
     }
-
-    private void SendPosition()
-    {
-        foreach (Connection connection in connections)
-        {
-            //SendData(hostID, JsonUtility.ToJson(datas), connection.id, unreliableChannel);
-        }
-    }
-
+    
     public override void ManualUpdate()
     {
         base.ManualUpdate();
@@ -141,6 +127,18 @@ public class CircleVRHost : CircleVRProtocolBase
 
         string strData = Deserialize(data ,size);
         ClientData clientData = JsonUtility.FromJson<ClientData>(strData);
+
+        switch (clientData.ContentName)
+        {
+            case "1":
+                vp.clip = CircleVR.Instance.Clip[1];
+                vp.Play();
+                break;
+            case "2":
+                vp.clip = CircleVR.Instance.Clip[2];
+                vp.Play();
+                break;
+        }
 
         if (TryCreateConnection(connectionId, clientData))
             return;

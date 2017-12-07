@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -270,6 +270,68 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1654264702
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1654264705}
+  - component: {fileID: 1654264704}
+  - component: {fileID: 1654264703}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1654264703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1654264702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1077351063, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
+--- !u!114 &1654264704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1654264702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -619905303, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 5
+--- !u!4 &1654264705
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1654264702}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1903895475
 Prefab:
   m_ObjectHideFlags: 0
@@ -277,6 +339,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114631792930349856, guid: 3f26af105b3205048acf2717053d2359,
+        type: 2}
+      propertyPath: clip.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4949999705784656, guid: 3f26af105b3205048acf2717053d2359, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -312,12 +379,12 @@ Prefab:
     - target: {fileID: 224036049801095342, guid: 3f26af105b3205048acf2717053d2359,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 361.5
+      value: 498.5
       objectReference: {fileID: 0}
     - target: {fileID: 224036049801095342, guid: 3f26af105b3205048acf2717053d2359,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 176
+      value: 454.5
       objectReference: {fileID: 0}
     - target: {fileID: 224901630312560210, guid: 3f26af105b3205048acf2717053d2359,
         type: 2}
@@ -368,7 +435,31 @@ Prefab:
         type: 2}
       propertyPath: display
       value: 
+      objectReference: {fileID: 1271505106359424, guid: 16fd8540c57874fd5a273991e5828343,
+        type: 2}
+    - target: {fileID: 114631792930349856, guid: 3f26af105b3205048acf2717053d2359,
+        type: 2}
+      propertyPath: contentName
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114631792930349856, guid: 3f26af105b3205048acf2717053d2359,
+        type: 2}
+      propertyPath: clip.Array.data[0]
+      value: 
+      objectReference: {fileID: 32900000, guid: 23175dceacadf7847b0baf8467d0179d,
+        type: 3}
+    - target: {fileID: 114631792930349856, guid: 3f26af105b3205048acf2717053d2359,
+        type: 2}
+      propertyPath: clip.Array.data[1]
+      value: 
+      objectReference: {fileID: 32900000, guid: f935b8f61b2c91d45ba11888612e783d,
+        type: 3}
+    - target: {fileID: 114631792930349856, guid: 3f26af105b3205048acf2717053d2359,
+        type: 2}
+      propertyPath: clip.Array.data[2]
+      value: 
+      objectReference: {fileID: 32900000, guid: ec97c7f3010e4994786ec7f7d0796fe3,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3f26af105b3205048acf2717053d2359, type: 2}
   m_IsPrefabParent: 0

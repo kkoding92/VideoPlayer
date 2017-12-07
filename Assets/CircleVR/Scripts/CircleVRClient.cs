@@ -8,6 +8,8 @@ public class CircleVRClient : CircleVRProtocolBase
     private string serverIP;
     private int serverPort;
 
+    private string content;
+
     private bool connecting;
     private bool connected;
 
@@ -21,21 +23,15 @@ public class CircleVRClient : CircleVRProtocolBase
 
         serverIP = config.serverIp;
         serverPort = config.serverPort;
+
+        content = CircleVR.Instance.ContentName;
         
         if(Delegate != null)
             Delegate.OnClientInit();
+
         initFinished = true;
     }
-
-    private Transform CreateTracker(string name)
-    {
-        GameObject tracker = new GameObject(name);
-
-        //GameObject head = GameObject.Instantiate(CircleVR.Instance.HeadModelPrefab);
-       
-        return tracker.transform;
-    }
-
+    
     private void Connect()
     {
         if (!initFinished)
@@ -102,14 +98,12 @@ public class CircleVRClient : CircleVRProtocolBase
                 return;
             }
         }
-
-        HostData hostData = JsonUtility.FromJson<HostData>(deserializedData);
     }
-    
+   
     private void SendClientData()
     {
-        //ClientData data = new ClientData(userId, trackerId);
-        //string json = JsonUtility.ToJson(data);
-        //SendData(hostID, json, connectionId, reliableChannel);
+        ClientData data = new ClientData(content);
+        string json = JsonUtility.ToJson(data);
+        SendData(hostID, json, connectionId, reliableChannel);
     }
 }
