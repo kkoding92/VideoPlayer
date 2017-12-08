@@ -1,18 +1,26 @@
-﻿using System.Runtime.InteropServices;
-using System.Text;
+﻿
 using UnityEngine;
 using UnityEngine.Networking;
 
-public abstract class CircleVRProtocolBase
+public abstract class CircleVRTransportBase
 {
-    public static CircleVREventHandler Delegate;
-    private const int REC_BUFFER_SIZE = 1024;
+    public readonly int circleVRHostId;
+    public readonly int reliableChannel;
+    public readonly int unreliableChannel;
 
-    protected int hostID;
-    protected int reliableChannel;
-    protected int unreliableChannel;
+    protected ICircleVRTransportEventHandler eventHandler;
 
-    public abstract void Init(Configuration config);
+    public CircleVRTransportBase(ICircleVRTransportEventHandler eventHandler , int maxConnection)
+    {
+        this.eventHandler = eventHandler;
+        CreateHost(out circleVRHostId, out reliableChannel, out unreliableChannel, maxConnection);
+    }
+
+    public CircleVRTransportBase(ICircleVRTransportEventHandler eventHandler, int maxConnection, int port)
+    {
+        this.eventHandler = eventHandler;
+        CreateHost(out circleVRHostId, out reliableChannel, out unreliableChannel, port, maxConnection);
+    }
 
     private HostTopology TransportInit(out int reliableChannelID, out int unreliableChannelID, int maxConnection)
     {
@@ -25,63 +33,24 @@ public abstract class CircleVRProtocolBase
         return new HostTopology(connectionConfig, maxConnection);
     }
 
-    protected void CreateHost(out int hostID, out int reliableChannelID, out int unreliableChannelID, int maxConnection)
+    private void CreateHost(out int hostID, out int reliableChannelID, out int unreliableChannelID, int maxConnection)
     {
         hostID = NetworkTransport.AddHost(TransportInit(out reliableChannelID, out unreliableChannelID, maxConnection));
  
     }
 
-    protected void CreateHost(out int hostID, out int reliableChannelID, out int unreliableChannelID, int port, int maxConnection)
+    private void CreateHost(out int hostID, out int reliableChannelID, out int unreliableChannelID, int port, int maxConnection)
     {
         hostID = NetworkTransport.AddHost(TransportInit(out reliableChannelID, out unreliableChannelID, maxConnection), port);
     }
 
-    protected void SendData(int hostId, string str, int connectionId, int channelId)
-    {
-        byte error;
-        byte[] buffer = StringToByte(str);
-
-        Debug.Assert(sizeof(byte) * buffer.Length <= REC_BUFFER_SIZE);
-
-        NetworkTransport.Send(hostId, connectionId, channelId, buffer, buffer.Length, out error);
-
-        //Debug.Log("Send : " + str + "\n" + "BufferSize : " + buffer.Length);
-    }
-
-    protected string Deserialize(byte[] buffer , int recBufferSize)
-    {
-        byte[] recSizeBuffer = new byte[recBufferSize];
-
-        for (int i = 0; i < recBufferSize; i++)
-        {
-            recSizeBuffer[i] = buffer[i];
-        }
-
-        return ByteToString(recSizeBuffer);
-    }
-
-    protected string ByteToString(byte[] strByte)
-    {
-        string str = Encoding.UTF8.GetString(strByte);
-
-        return str;
-    }
-
-    private byte[] StringToByte(string str)
-    {
-        byte[] strByte = Encoding.UTF8.GetBytes(str);
-
-        return strByte;
-    }
-
     public virtual void ManualUpdate()
     {
-        int outHostId;
         int outConnectionId;
         int outChannelId;
         int outDataSize;
 
-        byte[] buffer = new byte[REC_BUFFER_SIZE];
+        byte[] buffer = new byte[CircleVRProtocol.REC_BUFFER_SIZE];
 
         byte error;
 
@@ -89,20 +58,26 @@ public abstract class CircleVRProtocolBase
 
         do
         {
-            networkEvent = NetworkTransport.ReceiveFromHost(hostID, out outConnectionId, out outChannelId, buffer, REC_BUFFER_SIZE, out outDataSize, out error);
+            networkEvent = NetworkTransport.ReceiveFromHost(circleVRHostId, out outConnectionId, out outChannelId, buffer, CircleVRProtocol.REC_BUFFER_SIZE, out outDataSize, out error);
              
             switch (networkEvent)
             {
                 case NetworkEventType.ConnectEvent:
-                    OnConnect(hostID, outConnectionId, error);
+                    OnConnect(circleVRHostId, outConnectionId, error);
+                    if(eventHandler != null)
+                        eventHandler.OnConnect(circleVRHostId, outConnectionId, error);
                     break;
 
                 case NetworkEventType.DataEvent:
-                    OnData(hostID, outConnectionId, outChannelId, buffer, outDataSize, error);
+                    OnData(circleVRHostId, outConnectionId, outChannelId, buffer, outDataSize, error);
+                    if (eventHandler != null)
+                        eventHandler.OnData(circleVRHostId, outConnectionId, outChannelId, buffer, outDataSize, error);
                     break;
 
                 case NetworkEventType.DisconnectEvent:
-                    OnDisconnect(hostID, outConnectionId, error);
+                    OnDisconnect(circleVRHostId, outConnectionId, error);
+                    if (eventHandler != null)
+                        eventHandler.OnDisConnect(circleVRHostId, outConnectionId, error);
                     break;
             }
 
@@ -112,19 +87,19 @@ public abstract class CircleVRProtocolBase
     protected virtual void OnConnect(int hostId, int connectionId, byte error)
     {
         Debug.Log("OnConnect(hostId = " + hostId + ", connectionId = "
-            + connectionId + ", error = " + error.ToString() + ")");
+            + connectionId + ", error = " + ((NetworkError)error).ToString() + ")");
     }
 
     protected virtual void OnDisconnect(int hostId, int connectionId, byte error)
     {
         Debug.Log("OnDisconnect(hostId = " + hostId + ", connectionId = "
-            + connectionId + ", error = " + error.ToString() + ")");
+            + connectionId + ", error = " + ((NetworkError)error).ToString() + ")");
     }
 
     protected virtual void OnBroadcast(int hostId, byte[] data, int size, byte error)
     {
         Debug.Log("OnBroadcast(hostId = " + hostId + ", data = "
-            + data + ", size = " + size + ", error = " + error.ToString() + ")");
+            + data + ", size = " + size + ", error = " + ((NetworkError)error).ToString() + ")");
     }
 
     protected virtual void OnData(int hostId, int connectionId, int channelId, byte[] data, int size, byte error)
@@ -134,3 +109,4 @@ public abstract class CircleVRProtocolBase
         //    + data + ", size = " + size + ", error = " + ((NetworkError)error).ToString() + ")");
     }
 }
+
