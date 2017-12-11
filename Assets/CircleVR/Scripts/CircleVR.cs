@@ -88,15 +88,8 @@ public class CircleVR : MonoBehaviour
     [SerializeField] private Text oriented;
 
     private Configuration config;
-    private CircleVRTransportManager manager = null;
-
-    public CircleVRTransportManager transportManager
-    {
-        get
-        {
-            return manager;
-        }
-    }
+    private static CircleVRProtocol protocol = new CircleVRProtocol();
+    private static CircleVRTransportManager manager = null;
 
     public string Log
     {
@@ -112,7 +105,6 @@ public class CircleVR : MonoBehaviour
             log.text = stringBuilder.ToString();
         }
     }
-
     public string ContentName
     {
         get
@@ -125,7 +117,6 @@ public class CircleVR : MonoBehaviour
             contentName = value;
         }
     }
-
     public string Position
     {
         get
@@ -138,7 +129,6 @@ public class CircleVR : MonoBehaviour
             position.text = value;
         }
     }
-
     public string Oriented
     {
         get
@@ -164,7 +154,6 @@ public class CircleVR : MonoBehaviour
             headModelPrefab = value;
         }
     }
-
     public GameObject HostUI
     {
         get
@@ -177,7 +166,6 @@ public class CircleVR : MonoBehaviour
             hostUI = value;
         }
     }
-
     public GameObject ClientUI
     {
         get
@@ -189,6 +177,26 @@ public class CircleVR : MonoBehaviour
         {
             clientUI = value;
         }
+    }
+
+    public static void SendDataReliable(int connectionId , string data)
+    {
+        protocol.SendData(manager.CircleVRTransport.circleVRHostId, data, connectionId, manager.CircleVRTransport.reliableChannel);
+    }
+
+    public static void SendDataUnreliable(int connectionId, string data)
+    {
+        protocol.SendData(manager.CircleVRTransport.circleVRHostId, data, connectionId, manager.CircleVRTransport.unreliableChannel);
+    }
+
+    public static void SendDataStateUpdate(int connectionId, string data)
+    {
+        protocol.SendData(manager.CircleVRTransport.circleVRHostId, data, connectionId, manager.CircleVRTransport.stateUpdateChannel);
+    }
+
+    public static string Deserialize(byte[] buffer, int recBufferSize)
+    {
+        return protocol.Deserialize(buffer, recBufferSize);
     }
 
     public void SetClientSlot(int userId , ClientState state)
@@ -255,8 +263,6 @@ public class CircleVR : MonoBehaviour
         canvas.SetActive(false);
 
         LoadConfigure();
-
-        //Debug.Log(System.Runtime.InteropServices.Marshal.SizeOf(new ClientData(0, "")));
 
         manager = new CircleVRTransportManager(config, trackerOrigin);
     }

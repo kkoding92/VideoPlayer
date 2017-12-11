@@ -5,32 +5,9 @@ using UnityEngine.Networking;
 
 public class CircleVRProtocol
 {
-    public static readonly int REC_BUFFER_SIZE = 1024;
-    public static int RELIABLE_CHANNEL
-    {
-        get
-        {
-            return CircleVR.Instance.transportManager.CircleVRTransport.reliableChannel;
-        }
-    }
+    public const int REC_BUFFER_SIZE = 1024;
 
-    public static int UNRELIABLE_CHANNEL
-    {
-        get
-        {
-            return CircleVR.Instance.transportManager.CircleVRTransport.unreliableChannel;
-        }
-    }
-
-    public static int CIRCLE_VR_HOST_ID
-    {
-        get
-        {
-            return CircleVR.Instance.transportManager.CircleVRTransport.circleVRHostId;
-        }
-    }
-
-    public static void SendData(int hostId, string str, int connectionId, int channelId)
+    public void SendData(int hostId, string str, int connectionId, int channelId)
     {
         byte error;
         byte[] buffer = StringToByte(str);
@@ -47,7 +24,7 @@ public class CircleVRProtocol
         //Debug.Log("Send : " + str + "\n" + "BufferSize : " + buffer.Length);
     }
 
-    public static string Deserialize(byte[] buffer, int recBufferSize)
+    public string Deserialize(byte[] buffer, int recBufferSize)
     {
         byte[] recSizeBuffer = new byte[recBufferSize];
 
@@ -59,14 +36,14 @@ public class CircleVRProtocol
         return ByteToString(recSizeBuffer);
     }
 
-    private static string ByteToString(byte[] strByte)
+    private string ByteToString(byte[] strByte)
     {
         string str = Encoding.UTF8.GetString(strByte);
 
         return str;
     }
 
-    private static byte[] StringToByte(string str)
+    private byte[] StringToByte(string str)
     {
         byte[] strByte = Encoding.UTF8.GetBytes(str);
 

@@ -6,42 +6,40 @@ public abstract class CircleVRTransportBase
 {
     public readonly int circleVRHostId;
     public readonly int reliableChannel;
+    public readonly int stateUpdateChannel;
     public readonly int unreliableChannel;
 
-    protected ICircleVRTransportEventHandler eventHandler;
-
-    public CircleVRTransportBase(ICircleVRTransportEventHandler eventHandler , int maxConnection)
+    public CircleVRTransportBase(int maxConnection)
     {
-        this.eventHandler = eventHandler;
-        CreateHost(out circleVRHostId, out reliableChannel, out unreliableChannel, maxConnection);
+        CreateHost(out circleVRHostId, out reliableChannel, out stateUpdateChannel , out unreliableChannel, maxConnection);
     }
 
-    public CircleVRTransportBase(ICircleVRTransportEventHandler eventHandler, int maxConnection, int port)
+    public CircleVRTransportBase(int maxConnection, int port)
     {
-        this.eventHandler = eventHandler;
-        CreateHost(out circleVRHostId, out reliableChannel, out unreliableChannel, port, maxConnection);
+        CreateHost(out circleVRHostId, out reliableChannel, out stateUpdateChannel, out unreliableChannel, port, maxConnection);
     }
 
-    private HostTopology TransportInit(out int reliableChannelID, out int unreliableChannelID, int maxConnection)
+    private HostTopology TransportInit(out int reliableChannelID, out int stateUpdateChannelId , out int unreliableChannelId, int maxConnection)
     {
         NetworkTransport.Init();
         ConnectionConfig connectionConfig = new ConnectionConfig();
         connectionConfig.FragmentSize = 1000;
         connectionConfig.PacketSize = 1470;
-        reliableChannelID = connectionConfig.AddChannel(QosType.Reliable);
-        unreliableChannelID = connectionConfig.AddChannel(QosType.StateUpdate);
+        reliableChannelID = connectionConfig.AddChannel(QosType.ReliableSequenced);
+        stateUpdateChannelId = connectionConfig.AddChannel(QosType.StateUpdate);
+        unreliableChannelId = connectionConfig.AddChannel(QosType.Unreliable);
         return new HostTopology(connectionConfig, maxConnection);
     }
 
-    private void CreateHost(out int hostID, out int reliableChannelID, out int unreliableChannelID, int maxConnection)
+    private void CreateHost(out int hostID, out int reliableChannelID , out int stateUpdateChannelId, out int unreliableChannelId, int maxConnection)
     {
-        hostID = NetworkTransport.AddHost(TransportInit(out reliableChannelID, out unreliableChannelID, maxConnection));
+        hostID = NetworkTransport.AddHost(TransportInit(out reliableChannelID, out stateUpdateChannelId,out unreliableChannelId, maxConnection));
  
     }
 
-    private void CreateHost(out int hostID, out int reliableChannelID, out int unreliableChannelID, int port, int maxConnection)
+    private void CreateHost(out int hostID, out int reliableChannelID, out int stateUpdateChannelId, out int unreliableChannelId, int port, int maxConnection)
     {
-        hostID = NetworkTransport.AddHost(TransportInit(out reliableChannelID, out unreliableChannelID, maxConnection), port);
+        hostID = NetworkTransport.AddHost(TransportInit(out reliableChannelID, out stateUpdateChannelId, out unreliableChannelId, maxConnection), port);
     }
 
     public virtual void ManualUpdate()
@@ -64,20 +62,14 @@ public abstract class CircleVRTransportBase
             {
                 case NetworkEventType.ConnectEvent:
                     OnConnect(circleVRHostId, outConnectionId, error);
-                    if(eventHandler != null)
-                        eventHandler.OnConnect(circleVRHostId, outConnectionId, error);
                     break;
 
                 case NetworkEventType.DataEvent:
                     OnData(circleVRHostId, outConnectionId, outChannelId, buffer, outDataSize, error);
-                    if (eventHandler != null)
-                        eventHandler.OnData(circleVRHostId, outConnectionId, outChannelId, buffer, outDataSize, error);
                     break;
 
                 case NetworkEventType.DisconnectEvent:
                     OnDisconnect(circleVRHostId, outConnectionId, error);
-                    if (eventHandler != null)
-                        eventHandler.OnDisConnect(circleVRHostId, outConnectionId, error);
                     break;
             }
 

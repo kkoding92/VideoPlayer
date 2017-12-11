@@ -21,16 +21,15 @@ public class CircleVRTransportManager
 
     public CircleVRTransportBase CreateTransport(Configuration config , Transform trackerOrigin = null)
     {
-        ICircleVRTransportEventHandler eventHandler;
         if (config.clientTrackerId != "")
         {
-            eventHandler = GameObject.FindObjectOfType<CircleVRClientHandler>();
-            CircleVRClient client = new CircleVRClient(eventHandler , config , trackerOrigin);
+            CircleVRClientHandler clientHandler  = GameObject.FindObjectOfType<CircleVRClientHandler>();
+            CircleVRClient client = new CircleVRClient(clientHandler, config , trackerOrigin);
             return client;
         }
 
-        eventHandler = GameObject.FindObjectOfType<CircleVRServerHandler>();
-        CircleVRHost host = new CircleVRHost(eventHandler, CircleVR.MAX_CLIENT_COUNT, config);
+        CircleVRServerHandler handler = GameObject.FindObjectOfType<CircleVRServerHandler>();
+        CircleVRHost host = new CircleVRHost(handler, CircleVR.MAX_CLIENT_COUNT, config);
         return host;
     }
 
