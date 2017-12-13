@@ -14,3 +14,4 @@ public abstract class CircleVRClientHandler : MonoBehaviour ,ICircleVRTransportE
 
     public abstract void OnInit(AirVRCameraRig rig);
 }
+

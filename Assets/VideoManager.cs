@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Video;
 
 [Serializable]
-public struct Configuration
+public struct Config
 {
     public string serverIp;
     public int serverPort;
@@ -29,14 +29,14 @@ public class VideoManager : MonoBehaviour {
         }
     }
     
-    [SerializeField] private GameObject cam;
+    [SerializeField] private Camera cam;
     [SerializeField] private GameObject display;
     [SerializeField] private VideoClip[] clip;
+    [SerializeField] private int frameVal;
+    private Config config;
+    private CircleVRTransportBase transportBase;
 
-    private Configuration config;
-    private CircleVRTransportBase protocol;
-
-    public GameObject Cam
+    public Camera Cam
     {
         get
         {
@@ -75,16 +75,29 @@ public class VideoManager : MonoBehaviour {
         }
     }
 
-    public CircleVRTransportBase Protocol
+    public CircleVRTransportBase TransportBase
     {
         get
         {
-            return protocol;
+            return transportBase;
         }
 
         set
         {
-            protocol = value;
+            transportBase = value;
+        }
+    }
+
+    public int FrameVal
+    {
+        get
+        {
+            return frameVal;
+        }
+
+        set
+        {
+            frameVal = value;
         }
     }
 
@@ -92,22 +105,21 @@ public class VideoManager : MonoBehaviour {
     {
         LoadConfigure();
 
-        Protocol = new VideoPlayerClient();
-        Protocol.Init(config);
+        TransportBase = new VideoPlayerClient(config);
     }
 
     private void Update()
     {
-        if (Protocol == null)
+        if (TransportBase == null)
             return;
 
-        Protocol.ManualUpdate();
+        TransportBase.ManualUpdate();
     }
 
     private void LoadConfigure()
     {
 #if UNITY_EDITOR
-        config = JsonUtility.FromJson<Configuration>(File.ReadAllText(Application.streamingAssetsPath + "/VideoPlayer.json"));
+        config = JsonUtility.FromJson<Config>(File.ReadAllText(Application.streamingAssetsPath + "/VideoPlayer.json"));
 #endif
 #if !UNITY_EDITOR && UNITY_STANDALONE
         config = JsonUtility.FromJson<Configuration>(File.ReadAllText(Application.dataPath + "/../VideoPlayer.json"));

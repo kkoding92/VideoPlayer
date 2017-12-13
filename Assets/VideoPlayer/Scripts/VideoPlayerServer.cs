@@ -12,8 +12,8 @@ public class VideoPlayerServer : MonoBehaviour, ICircleVRTransportEventHandler
     [SerializeField] private Button backBtn;
     [SerializeField] private Button frontBtn;
 
-    private int conID;
-    private bool checkVideo= false;
+    private int conID = -1;
+    private bool checkVideo = false;
 
     private void Start()
     {
@@ -29,7 +29,8 @@ public class VideoPlayerServer : MonoBehaviour, ICircleVRTransportEventHandler
         if (!checkVideo)
             return;
 
-        CircleVR.SendDataReliable(conID, CircleVR.Instance.ContentName);
+        if (conID < 0)
+            return;
     }
 
     public void OnData(int hostId, int connectionId, int channelId, byte[] data, int size, byte error)
@@ -40,6 +41,7 @@ public class VideoPlayerServer : MonoBehaviour, ICircleVRTransportEventHandler
         {
             checkVideo = true;
             conID = connectionId;
+            CircleVR.SendDataReliable(conID, CircleVR.Instance.ContentName);
         }
     }
 
@@ -48,7 +50,7 @@ public class VideoPlayerServer : MonoBehaviour, ICircleVRTransportEventHandler
         if(conID == connectionId)
         {
             checkVideo = false;
-            conID = 0;
+            conID = -1;
         }
     }
 
