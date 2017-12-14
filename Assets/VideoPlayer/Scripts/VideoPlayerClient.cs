@@ -19,7 +19,8 @@ public class VideoPlayerClient : CircleVRTransportBase {
     private VideoPlayer vp;
     private static CircleVRProtocol protocol = new CircleVRProtocol();
 
-    private string currentContent = null;
+    private string currentContentName = null;
+    private string contentName;
 
     public VideoPlayerClient(Config config) : base(1)
     {
@@ -87,6 +88,8 @@ public class VideoPlayerClient : CircleVRTransportBase {
 
         vp.playOnAwake = true;
         vp.isLooping = true;
+
+        SetVideoClip();
     }
 
     private void Connect()
@@ -109,7 +112,7 @@ public class VideoPlayerClient : CircleVRTransportBase {
         connecting = true;
     }
 
-    private void ButtonState(string data)
+    private bool ButtonState(string data)
     {
         if (data.Contains("Play"))
             vp.Play();
@@ -119,6 +122,37 @@ public class VideoPlayerClient : CircleVRTransportBase {
             vp.frame -= VideoManager.Instance.FrameVal;
         else if (data.Contains("Front"))
             vp.frame += VideoManager.Instance.FrameVal;
+        else
+            return false;
+
+        return true;
+    }
+
+    private void SetVideoClip()
+    {
+        if (currentContentName.Equals(null))
+            vp.clip = VideoManager.Instance.Clip[0];
+        else if (currentContentName.Equals(VideoManager.Instance.ContentName1[0]))
+            vp.clip = VideoManager.Instance.Clip[1];
+        else if(currentContentName.Equals(VideoManager.Instance.ContentName1[1]))
+            vp.clip = VideoManager.Instance.Clip[2];
+
+        vp.Play();
+    }
+
+    private bool SetContentName(string msg)
+    {
+        if (msg.Equals(VideoManager.Instance.ContentName1[0]))
+            contentName = VideoManager.Instance.ContentName1[0];
+        else if(msg.Equals(VideoManager.Instance.ContentName1[1]))
+            contentName = VideoManager.Instance.ContentName1[1];
+
+        if (currentContentName.Equals(contentName))
+            return false;
+
+        currentContentName = contentName;
+
+        return true;
     }
 
     public override void ManualUpdate()
@@ -144,8 +178,15 @@ public class VideoPlayerClient : CircleVRTransportBase {
         base.OnData(hostId, connectionId, channelId, data, size, error);
 
         string deserializedData = protocol.Deserialize(data, size);
+        Debug.Log("Client: " + deserializedData);
 
-        ButtonState(deserializedData);
+        if (ButtonState(deserializedData))
+            return;
+
+        if (!SetContentName(deserializedData))
+            return;
+
+        SetVideoClip();
     }
 
     protected override void OnDisconnect(int hostId, int connectionId, byte error)
@@ -155,6 +196,7 @@ public class VideoPlayerClient : CircleVRTransportBase {
         connected = false;
         connecting = false;
 
-        currentContent = null;
+        currentContentName = null;
+        SetVideoClip();
     }
 }

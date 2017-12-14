@@ -36,7 +36,7 @@ public class VideoPlayerServer : MonoBehaviour, ICircleVRTransportEventHandler
     public void OnData(int hostId, int connectionId, int channelId, byte[] data, int size, byte error)
     {
         string msg = CircleVR.Deserialize(data, CircleVRProtocol.REC_BUFFER_SIZE);
-
+        Debug.Log("server:" + msg);
         if (msg.Equals("VideoPlayer"))
         {
             checkVideo = true;

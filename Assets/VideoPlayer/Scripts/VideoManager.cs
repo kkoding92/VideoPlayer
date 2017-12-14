@@ -33,6 +33,8 @@ public class VideoManager : MonoBehaviour {
     [SerializeField] private GameObject display;
     [SerializeField] private VideoClip[] clip;
     [SerializeField] private int frameVal;
+    [SerializeField] private string[] ContentName;
+
     private Config config;
     private CircleVRTransportBase transportBase;
 
@@ -98,6 +100,19 @@ public class VideoManager : MonoBehaviour {
         set
         {
             frameVal = value;
+        }
+    }
+
+    public string[] ContentName1
+    {
+        get
+        {
+            return ContentName;
+        }
+
+        set
+        {
+            ContentName = value;
         }
     }
 
