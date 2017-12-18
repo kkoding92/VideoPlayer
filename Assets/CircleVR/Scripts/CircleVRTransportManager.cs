@@ -8,7 +8,7 @@ public class CircleVRTransportManager
 
     public CircleVRTransportManager(Configuration config ,Transform trackerOrigin = null)
     {
-        //circleVRTransport = CreateTransport(config, trackerOrigin);
+        circleVRTransport = CreateTransport(config, trackerOrigin);
     }
 
     public CircleVRTransportBase CircleVRTransport
@@ -19,19 +19,20 @@ public class CircleVRTransportManager
         }
     }
 
-    //public CircleVRTransportBase CreateTransport(Configuration config , Transform trackerOrigin = null)
-    //{
-    //    if (config.clientTrackerId != "")
-    //    {
-    //        CircleVRClientHandler clientHandler  = GameObject.FindObjectOfType<CircleVRClientHandler>();
-    //        CircleVRClient client = new CircleVRClient(clientHandler, config , trackerOrigin);
-    //        return client;
-    //    }
+    public CircleVRTransportBase CreateTransport(Configuration config , Transform trackerOrigin = null)
+    {
+        GameObject headPrefab = Resources.Load<GameObject>("head");
+        if (config.data == null)
+        {
+            CircleVRClientHandler clientHandler  = GameObject.FindObjectOfType<CircleVRClientHandler>();
+            CircleVRClient client = new CircleVRClient(headPrefab ,clientHandler, config , trackerOrigin);
+            return client;
+        }
 
-    //    CircleVRServerHandler handler = GameObject.FindObjectOfType<CircleVRServerHandler>();
-    //    CircleVRHost host = new CircleVRHost(handler, CircleVR.MAX_CLIENT_COUNT, config);
-    //    return host;
-    //}
+        CircleVRServerHandler handler = GameObject.FindObjectOfType<CircleVRServerHandler>();
+        CircleVRHost host = new CircleVRHost(handler, CircleVR.MAX_CLIENT_COUNT, config , trackerOrigin);
+        return host;
+    }
 
     public void ManualUpdate()
     {

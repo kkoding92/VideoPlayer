@@ -4,8 +4,9 @@ using UnityEngine;
 
 public interface ICircleVRTransportEventHandler
 {
-    void OnConnect(int hostId, int connectionId, byte error);
-    void OnDisConnect(int hostId, int connectionId, byte error);
-    void OnData(int hostId, int connectionId, int channelId, byte[] data, int size, byte error);
+    void OnData(string data);
     void OnManualUpdate();
+    void SendReliable(string data);
+    void SendUnreliable(string data);
+    void SendStateUpdate(string data);
 }

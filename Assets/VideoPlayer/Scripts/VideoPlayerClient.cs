@@ -17,7 +17,6 @@ public class VideoPlayerClient : CircleVRTransportBase {
     private int connectionId;
     private List<Camera> camList = new List<Camera>();
     private VideoPlayer vp;
-    private static CircleVRProtocol protocol = new CircleVRProtocol();
 
     private string currentContentName = null;
     private string contentName;
@@ -114,13 +113,13 @@ public class VideoPlayerClient : CircleVRTransportBase {
 
     private bool ButtonState(string data)
     {
-        if (data.Contains("Play"))
+        if (data.Equals("Play"))
             vp.Play();
-        else if (data.Contains("Pause"))
+        else if (data.Equals("Pause"))
             vp.Pause();
-        else if (data.Contains("Back"))
+        else if (data.Equals("Back"))
             vp.frame -= VideoManager.Instance.FrameVal;
-        else if (data.Contains("Front"))
+        else if (data.Equals("Front"))
             vp.frame += VideoManager.Instance.FrameVal;
         else
             return false;
@@ -166,32 +165,31 @@ public class VideoPlayerClient : CircleVRTransportBase {
         base.ManualUpdate();
     }
     
-    protected override void OnConnect(int hostId, int connectionId, byte error)
+    protected override void OnConnect(int connectionId, byte error)
     {
-        base.OnConnect(hostId, connectionId, error);
+        base.OnConnect(connectionId, error);
 
-        protocol.SendData(hostId, "VideoPlayer", connectionId, reliableChannel);
+        SendReliable(connectionId, "VideoPlayer");
     }
-
-    protected override void OnData(int hostId, int connectionId, int channelId, byte[] data, int size, byte error)
+    
+    protected override void OnData(int connectionId, int channelId, byte[] data, int size, byte error)
     {
-        base.OnData(hostId, connectionId, channelId, data, size, error);
+        base.OnData(connectionId, channelId, data, size, error);
 
-        string deserializedData = protocol.Deserialize(data, size);
-        Debug.Log("Client: " + deserializedData);
+        string msg = Deserialize(data, size);
 
-        if (ButtonState(deserializedData))
+        if (ButtonState(msg))
             return;
 
-        if (!SetContentName(deserializedData))
+        if (SetContentName(msg))
             return;
 
         SetVideoClip();
     }
 
-    protected override void OnDisconnect(int hostId, int connectionId, byte error)
+    protected override void OnDisconnect(int connectionId, byte error)
     {
-        base.OnDisconnect(hostId, connectionId, error);
+        base.OnDisconnect(connectionId, error);
 
         connected = false;
         connecting = false;
