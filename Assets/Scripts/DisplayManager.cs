@@ -9,6 +9,8 @@ public class DisplayManager : MonoBehaviour {
     [SerializeField] private VideoClip[] _vClips;
     [SerializeField] private int _frameVal;
     [SerializeField] private float _interval;
+    [SerializeField] private string[] ContentName;
+
     public VideoPlayer _vp;
 
     public int FrameVal

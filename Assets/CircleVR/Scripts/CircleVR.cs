@@ -1,58 +1,38 @@
 ﻿using System;
 using System.IO;
-using UnityEngine.UI;
 using UnityEngine;
-using System.Text;
-using UnityEngine.Video;
 
 [Serializable]
-public struct ClientData
+public class Configuration
 {
-    public string ContentName;
-
-    public  ClientData(string ContentName)
+    [Serializable]
+    public class HostData
     {
-        this.ContentName = ContentName;
+        public int userId;
+        public string trackerId;
     }
-}
 
-[Serializable]
-public struct Configuration
-{
+    public HostData[] data;
     public string serverIp;
     public int serverPort;
+}
 
-    public string network;
+public enum ClientState
+{
+    Connected,
+    NotConnected
 }
 
 public class CircleVR : MonoBehaviour
 {
-    private static CircleVR instance = null;
-
-    public static CircleVR Instance
-    {
-        get
-        {
-            if (instance == null)
-                instance = FindObjectOfType<CircleVR>();
-
-            Debug.Assert(instance);
-
-            return instance;
-        }
-    }
-
-    public const int MAX_CLIENT_COUNT = 2;
+    public const int MAX_CLIENT_COUNT = 4;
 
     [SerializeField] private string contentName;
-    [SerializeField] private GameObject cam;
-    [SerializeField] private GameObject display;
-    [SerializeField] private GameObject canvas;
-    [SerializeField] private GameObject hostUI;
-    [SerializeField] private VideoClip[] clip;
-  
+    //[SerializeField] private GameObject headModelPrefab;
+    [SerializeField] private Transform trackerOrigin;
+
     private Configuration config;
-    private CircleVRProtocolBase protocol;
+    private static CircleVRTransportManager manager = null;
 
     public string ContentName
     {
@@ -66,99 +46,40 @@ public class CircleVR : MonoBehaviour
             contentName = value;
         }
     }
-    
-    public CircleVRProtocolBase Protocol
-    {
-        get
-        {
-            return protocol;
-        }
 
-        set
-        {
-            protocol = value;
-        }
+    public static void SendReliable(string data)
+    {
+        manager.CircleVRTransport.SendBroadcastReliable(data);
     }
 
-    public GameObject Cam
+    public static void SendUnreliable(string data)
     {
-        get
-        {
-            return cam;
-        }
-
-        set
-        {
-            cam = value;
-        }
+        manager.CircleVRTransport.SendBroadcastUnreliable(data);
     }
 
-    public GameObject Display
+    public static void SendStateUpdate(string data)
     {
-        get
-        {
-            return display;
-        }
-
-        set
-        {
-            display = value;
-        }
+        manager.CircleVRTransport.SendBroadcastStateUpdate(data);
     }
 
-    public VideoClip[] Clip
+    public static string Deserialize(byte[] buffer, int recBufferSize)
     {
-        get
-        {
-            return clip;
-        }
-
-        set
-        {
-            clip = value;
-        }
-    }
-
-    public GameObject HostUI
-    {
-        get
-        {
-            return hostUI;
-        }
-
-        set
-        {
-            hostUI = value;
-        }
+        return manager.CircleVRTransport.Deserialize(buffer, recBufferSize);
     }
 
     private void Start()
     {
-        canvas.SetActive(false);
-
         LoadConfigure();
-        
-        if(config.network == "client")
-        {
-            Protocol = new CircleVRClient();
-        }
-        else if(config.network =="")
-        {
-            Protocol = new CircleVRHost();
-            HostUI.SetActive(false);
-        }
 
-        Protocol.Init(config);
+        manager = new CircleVRTransportManager(config, trackerOrigin);
     }
-    private void Update()
+
+    private void FixedUpdate()
     {
-        if(Input.GetKeyDown("`"))
-            canvas.SetActive(!canvas.activeSelf);
 
-        if (Protocol == null)
-            return;
 
-        Protocol.ManualUpdate();
+        if (manager != null)
+            manager.ManualUpdate();
     }
 
     private void LoadConfigure()
