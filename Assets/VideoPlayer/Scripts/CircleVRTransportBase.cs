@@ -220,7 +220,6 @@ public abstract class CircleVRTransportBase
     private string ByteToString(byte[] strByte)
     {
         string str = Encoding.UTF8.GetString(strByte);
-
         return str;
     }
 

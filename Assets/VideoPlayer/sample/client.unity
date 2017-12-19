@@ -121,6 +121,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 114791396559203172, guid: f75e6f42583212b4e89c672ccae41569,
         type: 2}
+      propertyPath: clip.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114791396559203172, guid: f75e6f42583212b4e89c672ccae41569,
+        type: 2}
       propertyPath: ContentName.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -164,13 +169,48 @@ Prefab:
     - target: {fileID: 114791396559203172, guid: f75e6f42583212b4e89c672ccae41569,
         type: 2}
       propertyPath: ContentName.Array.data[1]
-      value: Beakje
+      value: Baekje
       objectReference: {fileID: 0}
     - target: {fileID: 114791396559203172, guid: f75e6f42583212b4e89c672ccae41569,
         type: 2}
       propertyPath: ContentName.Array.data[2]
       value: Lee
       objectReference: {fileID: 0}
+    - target: {fileID: 114791396559203172, guid: f75e6f42583212b4e89c672ccae41569,
+        type: 2}
+      propertyPath: display
+      value: 
+      objectReference: {fileID: 1356024605230050, guid: 2dfefd8d8ada32942ad65e83b42c32fe,
+        type: 2}
+    - target: {fileID: 114791396559203172, guid: f75e6f42583212b4e89c672ccae41569,
+        type: 2}
+      propertyPath: frameVal
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114791396559203172, guid: f75e6f42583212b4e89c672ccae41569,
+        type: 2}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 20974905996054748, guid: 0a558504144921847a2bd32fcc7c7f39,
+        type: 2}
+    - target: {fileID: 114791396559203172, guid: f75e6f42583212b4e89c672ccae41569,
+        type: 2}
+      propertyPath: clip.Array.data[0]
+      value: 
+      objectReference: {fileID: 32900000, guid: 23175dceacadf7847b0baf8467d0179d,
+        type: 3}
+    - target: {fileID: 114791396559203172, guid: f75e6f42583212b4e89c672ccae41569,
+        type: 2}
+      propertyPath: clip.Array.data[1]
+      value: 
+      objectReference: {fileID: 32900000, guid: f935b8f61b2c91d45ba11888612e783d,
+        type: 3}
+    - target: {fileID: 114791396559203172, guid: f75e6f42583212b4e89c672ccae41569,
+        type: 2}
+      propertyPath: clip.Array.data[2]
+      value: 
+      objectReference: {fileID: 32900000, guid: ec97c7f3010e4994786ec7f7d0796fe3,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f75e6f42583212b4e89c672ccae41569, type: 2}
   m_IsPrefabParent: 0
