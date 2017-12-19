@@ -213,7 +213,7 @@ public abstract class CircleVRTransportBase
             return;
 
         Debug.LogError(e.ToString());
-        //CircleVRUI.Instance.Log = "\n" + e.ToString();
+        CircleVRUI.Instance.Log = "\n" + e.ToString();
         //Debug.Log("Send : " + str + "\n" + "BufferSize : " + buffer.Length);
     }
 
