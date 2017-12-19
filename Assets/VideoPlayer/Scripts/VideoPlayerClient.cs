@@ -62,7 +62,6 @@ public class VideoPlayerClient : CircleVRTransportBase {
         Display.onDisplaysUpdated += OnDisplaysUpdated;
         for (int i = 0; i < Display.displays.Length; i++)
         {
-            Debug.Log(Display.displays.Length);
             camList[i].targetDisplay = i; //Set the Display in which to render the camera to
             Display.displays[i].Activate(); //Enable the display
         }
@@ -83,7 +82,7 @@ public class VideoPlayerClient : CircleVRTransportBase {
 
     private void SetVideoPanel()
     {
-        vp.clip = VideoManager.Instance.Clip[0];
+        //vp.clip = VideoManager.Instance.Clip[0];
 
         vp.playOnAwake = true;
         vp.isLooping = true;
@@ -129,7 +128,7 @@ public class VideoPlayerClient : CircleVRTransportBase {
 
     private void SetVideoClip()
     {
-        if (currentContentName.Equals(null))
+        if (currentContentName ==null)
             vp.clip = VideoManager.Instance.Clip[0];
         else if (currentContentName.Equals(VideoManager.Instance.ContentName1[0]))
             vp.clip = VideoManager.Instance.Clip[1];
