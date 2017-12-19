@@ -83,8 +83,6 @@ public class VideoPlayerClient : CircleVRTransportBase {
 
     private void SetVideoPanel()
     {
-        vp.clip = VideoManager.Instance.Clip[0];
-
         vp.playOnAwake = true;
         vp.isLooping = true;
 

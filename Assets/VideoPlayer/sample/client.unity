@@ -122,7 +122,7 @@ Prefab:
     - target: {fileID: 114791396559203172, guid: f75e6f42583212b4e89c672ccae41569,
         type: 2}
       propertyPath: ContentName.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4146131781956858, guid: f75e6f42583212b4e89c672ccae41569, type: 2}
       propertyPath: m_LocalPosition.x
@@ -159,11 +159,16 @@ Prefab:
     - target: {fileID: 114791396559203172, guid: f75e6f42583212b4e89c672ccae41569,
         type: 2}
       propertyPath: ContentName.Array.data[0]
-      value: Beakje
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 114791396559203172, guid: f75e6f42583212b4e89c672ccae41569,
         type: 2}
       propertyPath: ContentName.Array.data[1]
+      value: Beakje
+      objectReference: {fileID: 0}
+    - target: {fileID: 114791396559203172, guid: f75e6f42583212b4e89c672ccae41569,
+        type: 2}
+      propertyPath: ContentName.Array.data[2]
       value: Lee
       objectReference: {fileID: 0}
     m_RemovedComponents: []
