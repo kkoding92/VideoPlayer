@@ -127,7 +127,7 @@ public class VideoPlayerClient : CircleVRTransportBase {
 
     private void SetVideoClip()
     {
-        if (currentContentName.Equals(null))
+        if (currentContentName == null)
             vp.clip = VideoManager.Instance.Clip[0];
         else if (currentContentName.Equals(VideoManager.Instance.ContentName1[0]))
             vp.clip = VideoManager.Instance.Clip[1];
