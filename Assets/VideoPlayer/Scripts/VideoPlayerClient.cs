@@ -1,8 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Video;
+
+[Serializable]
+public struct ContentName
+{
+    public string name;
+
+    public ContentName(string name)
+    {
+        this.name = name;
+    }
+}
 
 public class VideoPlayerClient : CircleVRTransportBase {
 
@@ -17,7 +29,6 @@ public class VideoPlayerClient : CircleVRTransportBase {
     private int connectionId;
     private List<Camera> camList = new List<Camera>();
     private VideoPlayer vp;
-    private static CircleVRProtocol protocol = new CircleVRProtocol();
 
     private string currentContentName = null;
     private string contentName;
@@ -112,22 +123,6 @@ public class VideoPlayerClient : CircleVRTransportBase {
         connecting = true;
     }
 
-    private bool ButtonState(string data)
-    {
-        if (data.Contains("Play"))
-            vp.Play();
-        else if (data.Contains("Pause"))
-            vp.Pause();
-        else if (data.Contains("Back"))
-            vp.frame -= VideoManager.Instance.FrameVal;
-        else if (data.Contains("Front"))
-            vp.frame += VideoManager.Instance.FrameVal;
-        else
-            return false;
-
-        return true;
-    }
-
     private void SetVideoClip()
     {
         if (currentContentName.Equals(null))
@@ -165,33 +160,50 @@ public class VideoPlayerClient : CircleVRTransportBase {
 
         base.ManualUpdate();
     }
-    
-    protected override void OnConnect(int hostId, int connectionId, byte error)
-    {
-        base.OnConnect(hostId, connectionId, error);
 
-        protocol.SendData(hostId, "VideoPlayer", connectionId, reliableChannel);
+    protected override void OnConnect(int connectionId, byte error)
+    {
+        base.OnConnect(connectionId, error);
+        SendReliable(connectionId, (byte)VideoPlayerPacket.VideoPlayer);
     }
 
-    protected override void OnData(int hostId, int connectionId, int channelId, byte[] data, int size, byte error)
+    protected override void OnData(int connectionId, int channelId, byte key, byte[] data, byte error)
     {
-        base.OnData(hostId, connectionId, channelId, data, size, error);
+        base.OnData(connectionId, channelId, key, data, error);
 
-        string deserializedData = protocol.Deserialize(data, size);
-        Debug.Log("Client: " + deserializedData);
+        VideoPlayerPacket type = (VideoPlayerPacket)key;
 
-        if (ButtonState(deserializedData))
+        if (type == VideoPlayerPacket.Play)
+        {
+            vp.Play(); return;
+        }
+        else if (type == VideoPlayerPacket.Pause)
+        {
+            vp.Pause(); return;
+        }
+        else if (type == VideoPlayerPacket.Back)
+        {
+            vp.frame -= VideoManager.Instance.FrameVal;
             return;
-
-        if (!SetContentName(deserializedData))
+        }
+        else if (type == VideoPlayerPacket.Front)
+        {
+            vp.frame += VideoManager.Instance.FrameVal;
             return;
+        }
+        else if (type == VideoPlayerPacket.Name)
+        {
+            ContentName msg = JsonUtility.FromJson<ContentName>(ByteToString(data));
+            if (!SetContentName(msg.name))
+                return;
+        }
 
         SetVideoClip();
     }
 
-    protected override void OnDisconnect(int hostId, int connectionId, byte error)
+    protected override void OnDisconnect(int connectionId, byte error)
     {
-        base.OnDisconnect(hostId, connectionId, error);
+        base.OnDisconnect(connectionId, error);
 
         connected = false;
         connecting = false;

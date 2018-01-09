@@ -14,9 +14,11 @@ public class VideoPlayerServer : MonoBehaviour, ICircleVRTransportEventHandler
 
     private int conID = -1;
     private bool checkVideo = false;
+    private CircleVR circleVR;
 
     private void Start()
     {
+        circleVR = GameObject.Find("CircleVR").GetComponent<CircleVR>();
         playBtn.onClick.AddListener(delegate { MenuButton(playBtn.name); });
         pauseBtn.onClick.AddListener(delegate { MenuButton(pauseBtn.name); });
         backBtn.onClick.AddListener(delegate { MenuButton(backBtn.name); });
@@ -31,18 +33,6 @@ public class VideoPlayerServer : MonoBehaviour, ICircleVRTransportEventHandler
 
         if (conID < 0)
             return;
-    }
-
-    public void OnData(int hostId, int connectionId, int channelId, byte[] data, int size, byte error)
-    {
-        string msg = CircleVR.Deserialize(data, CircleVRProtocol.REC_BUFFER_SIZE);
-        Debug.Log("server:" + msg);
-        if (msg.Equals("VideoPlayer"))
-        {
-            checkVideo = true;
-            conID = connectionId;
-            CircleVR.SendDataReliable(conID, CircleVR.Instance.ContentName);
-        }
     }
 
     public void OnDisConnect(int hostId, int connectionId, byte error)
@@ -63,12 +53,81 @@ public class VideoPlayerServer : MonoBehaviour, ICircleVRTransportEventHandler
     private void MenuButton(string name)
     {
         if (name.Equals("PlayBtn"))
-            CircleVR.SendDataReliable(conID, "Play");
+            SendReliable((Byte)VideoPlayerPacket.Play);
         else if (name.Equals("PauseBtn"))
-            CircleVR.SendDataReliable(conID, "Pause");
+            SendReliable((Byte)VideoPlayerPacket.Pause);
         else if (name.Equals("backBtn"))
-            CircleVR.SendDataReliable(conID, "Back");
+            SendReliable((Byte)VideoPlayerPacket.Back);
         else
-            CircleVR.SendDataReliable(conID, "Front");
+            SendReliable((Byte)VideoPlayerPacket.Front);
+    }
+
+    public void OnData(byte key, byte[] data)
+    {
+        VideoPlayerPacket type = (VideoPlayerPacket)key;
+
+        if(type == VideoPlayerPacket.VideoPlayer)
+        {
+            checkVideo = true;
+            SendReliable((Byte)VideoPlayerPacket.Name, StringToByte(circleVR.ContentName));
+        }
+    }
+
+    public void SendReliable(byte key, byte[] data)
+    {
+    }
+
+    public void SendUnreliable(byte key, byte[] data)
+    {
+    }
+
+    public void SendStateUpdate(byte key, byte[] data)
+    {
+    }
+
+    public void SendReliable(byte key)
+    {
+    }
+
+    public void SendUnreliable(byte key)
+    {
+    }
+
+    public void SendStateUpdate(byte key)
+    {
+    }
+
+    public void SendReliable(int connectionId, byte key, byte[] data)
+    {
+    }
+
+    public void SendUnreliable(int connectionId, byte key, byte[] data)
+    {
+    }
+
+    public void SendStateUpdate(int connectionId, byte key, byte[] data)
+    {
+    }
+
+    public void SendReliable(int connectionId, byte key)
+    {
+    }
+
+    public void SendUnreliable(int connectionId, byte key)
+    {
+    }
+
+    public void SendStateUpdate(int connectionId, byte key)
+    {
+    }
+
+    public string ByteToString(byte[] strByte)
+    {
+        throw new NotImplementedException();
+    }
+
+    public byte[] StringToByte(string str)
+    {
+        throw new NotImplementedException();
     }
 }

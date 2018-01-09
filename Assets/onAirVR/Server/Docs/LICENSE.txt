@@ -1,0 +1,39 @@
+The text of this may be found at: https://onairvr.io/docs/licenses/onairvrserver/
+
+
+onAirVR Server Software License Agreement
+
+Please read this Software License Agreement (this “License”) carefully because it governs your use of onAirVR Server software (this “Software”). By using the Software, you agree to be bound by this License. If you do not agree to be bound by this License, do not use the Software.
+IF YOU ARE ENTERING INTO THIS LICENSE ON BEHALF OF A COMPANY OR OTHER LEGAL ENTITY, YOU REPRESENT THAT YOU HAVE THE AUTHORITY TO BIND SUCH ENTITY TO THESE TERMS AND CONDITIONS, IN WHICH CASE THE TERMS “YOU” OR “YOUR” WILL REFER TO SUCH ENTITY. IF YOU DO NOT HAVE SUCH AUTHORITY, OR IF YOU DO NOT AGREE WITH THESE TERMS OF SERVICE, YOU MUST NOT ACCEPT THESE TERMS AND CONDITIONS AND MAY NOT USE THE SERVICES.
+
+1. Subject to the terms and conditions of this License, Clicked Inc. (“Clicked”) hereby grants to you a worldwide, non-exclusive, no-charge, non-transferable, non-sublicenseable, royalty-free copyright license to use this Software to create Virtual Reality experience in your applications, contents, games and demos (collectively referred to as “Developer Content”).
+
+2. THIS SOFTWARE AND ANY COMPONENT THEREOF IS PROVIDED BY CLICKED AND ITS CONTRIBUTORS “AS IS” AND ANY EXPRESS AND IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL CLICKED AS THE COPYRIGHT OWNER OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARSING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. SOME JURASDICTIONS DO NOT PERMIT THE EXCLUSION OR LIMITATION OF IMPLIED WARRANTIES, SO YOU MAY HAVE ADDITIONAL RIGHTS.
+
+3. By accepting terms and conditions of this License you hereby agree:
+a) Not to copy the Software except as permitted by this License;
+b) Not to modify, disassemble, decompile or otherwise reverse-engineer the Software;
+c) Not to use the Software for any other purpose than as permitted by this License;
+d) To ensure that your employees, agents and other parties under your control who will use the Software do so in accordance with the terms and conditions of this License and are accordingly notified of the same;
+e) Not to permit or facilitate the use of the Software in any manner which would constitute a breach of the terms and conditions of this License;
+f) Not to place or distribute the Software on any website, ftp server, or similar location without the express prior written consent with the Licensor; and
+g) Not to use the Software for any purpose which may be deemed immoral, offensive, threatening, abusive or otherwise harmful, as determined in Clicked’s sole discretion; and
+h) Not to use the Software for any purpose which violate any applicable law or regulation.
+
+4. In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall Clicked or any contributor be liable to you or your licensees or sublicensees for damages, including any direct, indirect, special, incidental, or consequential damages of any character arsing as a result of this License or out of the use or inability to use the Software (including but not limited to damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses), even if you or such contributor has been advised of the possibility of such damages.
+
+5. Your acceptance of the terms and conditions of this License in and of itself and for all Develper Content may be evidenced by any of the following: your usage of the Software or any element thereof, or acceptance of this License. As this License is updated for future releases of the Software, you agree to abide by and meet all requirements of future updates of this License for those future Software releases as evidenced by the same usage of the Software or any element thereof and the future updates of this License will apply for that future Developer Content that may be developed for or with that future Software or any element thereof (i.e., you cannot sidestep out of the requirements of the future updates of the License by developing against an older release of the Software or the License).
+
+6. Clicked reserves the right to cancel or terminate this License for any reason or no reason at Clicked’s convinience, including, but not limited to, the following reasons: a) intellectual infringement by you with Develper Content created by you that is used with or by the Software or any part thereof; and b) Developer that violates and infringes upon applicable law.
+
+7. This License may be amended by Clicked on a prospective basis, and your usage of the License after such amendments or changes signifies your consent to and acceptance of any such amendments or changes on a going forward basis.
+
+8. In the event any provision of this License is determined to be invalid, prohibited or unenforceable by a court or other body of competent jurisdiction, this License shall be construed as if such invalid, prohibited or unenforceable provision has been more narrowly drawn so as not to be invalid, prohibited or unenforceable.
+
+9. You may not assign any rights or obligations under this License without the advance written consent of Clicked, which may be withheld in its sole discretion. Clicked may assign its rights or obligations under this License in its sole discretion.
+
+10. Failure of either party at any time to enforce any of the provisions of this License will not be construed as a waiver of such provisions or in any way affect the validity of this License or parts thereof.
+
+11. Your remedies under this License shall be limited to the right to collect money damages, if any, and you hereby waive your right to injunctive or or other equitable relief.
+
+12. This License shall be governed and construed in accordance with the laws of the Republic of Korea without regard to any conflict-of-laws rules. Any and all disputes in connection with or arising out of this License shall be finally settled by arbitration. The arbitration shall be held in Hong Kong in accordance with the Rules of Arbitration of the International Chamber of Commerce by one or more arbitrator(s) appointed in accordance with the said rules. The arbitration award rendered by the arbitrator(s) shall be final and binding.

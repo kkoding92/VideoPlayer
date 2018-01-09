@@ -5,6 +5,16 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Video;
 
+public enum VideoPlayerPacket : Byte
+{
+    VideoPlayer = 50,
+    Play,
+    Pause,
+    Back,
+    Front,
+    Name,
+}
+
 [Serializable]
 public struct Config
 {
@@ -125,10 +135,8 @@ public class VideoManager : MonoBehaviour {
 
     private void Update()
     {
-        if (TransportBase == null)
-            return;
-
-        TransportBase.ManualUpdate();
+        if (TransportBase != null)
+            TransportBase.ManualUpdate();
     }
 
     private void LoadConfigure()
