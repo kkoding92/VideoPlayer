@@ -26,12 +26,12 @@ public class TrackingData
     [Serializable]
     public class CircleVRTransform
     {
-        public string onAirVRUserId;
+        public string onAirVRUserID;
         public Vector3 position;
         public Quaternion oriented;
     }
 
-    public CircleVRTransform[] cvTransforms;
+    public List<CircleVRTransform> cvTransforms;
 }
 
 [Serializable]

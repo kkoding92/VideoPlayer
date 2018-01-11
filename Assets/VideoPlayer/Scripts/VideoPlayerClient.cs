@@ -30,7 +30,7 @@ public class VideoPlayerClient : CircleVRTransportBase {
     private List<Camera> camList = new List<Camera>();
     private VideoPlayer vp;
 
-    private string currentContentName = null;
+    private string currentContentName = "";
     private string contentName;
 
     public VideoPlayerClient(Config config) : base(1)
@@ -125,7 +125,7 @@ public class VideoPlayerClient : CircleVRTransportBase {
 
     private void SetVideoClip()
     {
-        if (currentContentName.Equals(null))
+        if (currentContentName.Equals(""))
             vp.clip = VideoManager.Instance.Clip[0];
         else if (currentContentName.Equals(VideoManager.Instance.ContentName1[0]))
             vp.clip = VideoManager.Instance.Clip[1];
@@ -172,26 +172,8 @@ public class VideoPlayerClient : CircleVRTransportBase {
         base.OnData(connectionId, channelId, key, data, error);
 
         VideoPlayerPacket type = (VideoPlayerPacket)key;
-
-        if (type == VideoPlayerPacket.Play)
-        {
-            vp.Play(); return;
-        }
-        else if (type == VideoPlayerPacket.Pause)
-        {
-            vp.Pause(); return;
-        }
-        else if (type == VideoPlayerPacket.Back)
-        {
-            vp.frame -= VideoManager.Instance.FrameVal;
-            return;
-        }
-        else if (type == VideoPlayerPacket.Front)
-        {
-            vp.frame += VideoManager.Instance.FrameVal;
-            return;
-        }
-        else if (type == VideoPlayerPacket.Name)
+        
+        if (type == VideoPlayerPacket.Name)
         {
             ContentName msg = JsonUtility.FromJson<ContentName>(ByteToString(data));
             if (!SetContentName(msg.name))
@@ -208,7 +190,7 @@ public class VideoPlayerClient : CircleVRTransportBase {
         connected = false;
         connecting = false;
 
-        currentContentName = null;
+        currentContentName = "";
         SetVideoClip();
     }
 }
